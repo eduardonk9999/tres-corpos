@@ -6,15 +6,15 @@
     <title>Three Body Problem</title>
 </head>
 <body>
-    <canvas id="canvas" width="400" height="400"></canvas>
+    <canvas id="canvas" width="800" height="800"></canvas>
     <script>
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
         var G = 0.1; // Constante gravitacional
         var bodies = [
-            { x: 100, y: 100, mass: 10, vx: 0, vy: 0 }, // Corpo 1
-            { x: 200, y: 100, mass: 15, vx: 0, vy: 0 }, // Corpo 2
-            { x: 150, y: 200, mass: 20, vx: 0, vy: 0 }  // Corpo 3
+            { x: 100, y: 100, mass: 90, vx: 0, vy: 0 }, // Corpo 1
+            { x: 200, y: 100, mass: 55, vx: 0, vy: 0 }, // Corpo 2
+            { x: 150, y: 200, mass: 30, vx: 0, vy: 0 }  // Corpo 3
         ];
 
         function calculateAcceleration(iFromBody, coordinate) {
