@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three Body Problem</title>
+</head>
+<body>
+    <!--
+    // Calculates the acceleration of the body 'iFromBody'
+    // due to gravity from other bodies,
+    // using Newton's law of gravitation.
+    //   iFromBody: the index of body. 0 is first body, 1 is second body.
+    //   coordinate: 0 for x coordinate, 1 for y coordinate
+    function calculateAcceleration(iFromBody, coordinate) {
+        var result = 0;
+        var iFromBodyStart = iFromBody * 4; // Índice inicial do corpo no array de estado 'state'
+      
+        // Loop através dos corpos
+        for (var iToBody = 0; iToBody < initialConditions.bodies; iToBody++) {
+            if (iFromBody === iToBody) { continue; }
+            var iToBodyStart = iToBody * 4; // Índice inicial do corpo 'para' no array de estado 'state'
+      
+            // Distância entre os dois corpos
+            var distanceX = state.u[iToBodyStart + 0] - state.u[iFromBodyStart + 0];
+            var distanceY = state.u[iToBodyStart + 1] - state.u[iFromBodyStart + 1];
+            var distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+      
+            // Calcula a contribuição da gravidade de cada corpo para a aceleração total
+            result += constants.gravitationalConstant *
+                initialConditions.masses[iToBody] *
+                (state.u[iToBodyStart + coordinate] - state.u[iFromBodyStart + coordinate]) /
+                (Math.pow(distance, 3));
+        }
+      
+        return result;
+    }
+    -->
+    <canvas id="canvas" width="400" height="400"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        var G = 0.1; // Constante gravitacional
+        var bodies = [
+            { x: 100, y: 100, mass: 10, vx: 0, vy: 0 }, // Corpo 1
+            { x: 200, y: 100, mass: 15, vx: 0, vy: 0 }, // Corpo 2
+            { x: 150, y: 200, mass: 20, vx: 0, vy: 0 }  // Corpo 3
+        ];
+
+        function calculateAcceleration(iFromBody, coordinate) {
+            var result = 0;
+            var iFromBodyStart = iFromBody * 4; // Índice inicial do corpo no array de estado 'state'
+          
+            // Loop através dos corpos
+            for (var iToBody = 0; iToBody < bodies.length; iToBody++) {
+                if (iFromBody === iToBody) { continue; }
+                var iToBodyStart = iToBody * 4; // Índice inicial do corpo 'para' no array de estado 'state'
+          
+                // Distância entre os dois corpos
+                var distanceX = bodies[iToBody].x - bodies[iFromBody].x;
+                var distanceY = bodies[iToBody].y - bodies[iFromBody].y;
+                var distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
+          
+                // Calcula a contribuição da gravidade de cada corpo para a aceleração total
+                result += G * bodies[iToBody].mass * (bodies[iToBody][coordinate] - bodies[iFromBody][coordinate]) / Math.pow(distance, 3);
+            }
+          
+            return result;
+        }
+
+        function updateBodies() {
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                var ax = calculateAcceleration(i, 'x');
+                var ay = calculateAcceleration(i, 'y');
+                body.vx += ax;
+                body.vy += ay;
+                body.x += body.vx;
+                body.y += body.vy;
+            }
+        }
+
+        function drawBodies() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (var i = 0; i < bodies.length; i++) {
+                var body = bodies[i];
+                ctx.beginPath();
+                ctx.arc(body.x, body.y, Math.sqrt(body.mass), 0, 2 * Math.PI);
+                ctx.fillStyle = "blue";
+                ctx.fill();
+            }
+        }
+
+        function animate() {
+            updateBodies();
+            drawBodies();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
